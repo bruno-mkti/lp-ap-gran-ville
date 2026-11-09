@@ -64,17 +64,28 @@ input:focus,textarea:focus{border-color:var(--pool);outline:0}
 .err{color:#b3261e;font-size:15px;min-height:1em}
 .note{font-size:14px;color:var(--mut);margin:0}
 footer{padding:28px 0 40px;font-size:14px;color:var(--mut);text-align:center}
+.zm{cursor:zoom-in}
+.lb{position:fixed;inset:0;z-index:50;background:rgba(6,18,22,.94);display:none;align-items:center;justify-content:center;touch-action:pan-y}
+.lb.on{display:flex}
+.lb img{max-width:94vw;max-height:84vh;object-fit:contain;border-radius:10px;transition:opacity .2s,transform .2s}
+.lb img.sw{opacity:0;transform:scale(.97)}
+.lb button{position:absolute;background:rgba(255,255,255,.16);color:#fff;border:0;border-radius:50%;width:48px;height:48px;font-size:26px;cursor:pointer;display:grid;place-items:center}
+.lb button:hover{background:rgba(255,255,255,.3)}
+.lb .x{top:calc(14px + env(safe-area-inset-top,0px));right:14px}
+.lb .p{left:12px;top:50%;margin-top:-24px}.lb .n{right:12px;top:50%;margin-top:-24px}
+.lb .c{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:#cfe3e7;font-size:15px}
+@media(max-width:600px){.lb .p,.lb .n{top:auto;bottom:calc(10px + env(safe-area-inset-bottom,0px));margin:0}}
 .hero .tag,.hero h1,.hero .price{animation:in .7s both}
 @keyframes in{from{opacity:0;transform:translateY(14px)}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
 </style></head><body>
 
+<div class="facts"><div class="w"><center>📍 Condomínio Gran Life · Av. Manuel Lúcio, Bairro Gran Ville, Uberlândia – MG · CEP 38407-658</center></div></div>
 <header class="hero"><div class="w">
  <div>
   <span class="tag">Novo, nunca habitado · Gran Ville, Uberlândia</span>
-  <span class="tag">📍 Av. Manuel Lúcio, Bairro Gran Ville, Uberlândia – MG</span>
   <h1>Seu primeiro apartamento, com piscina e lazer completo.</h1>
-  <p>2 quartos, sacada e vaga coberta. <br>Seja o primeiro a morar.</p>
+  <p>2 quartos, sacada e vaga coberta. <br> Seja o primeiro a morar.</p>
   <div class="price"><small>Por apenas</small>R$ 260.000</div>
   <a class="btn" href="#quero">Quero agendar uma visita</a>
  </div>
@@ -91,7 +102,6 @@ footer{padding:28px 0 40px;font-size:14px;color:var(--mut);text-align:center}
   <figure><img loading="lazy" src="img/quarto.jpg" alt="Quarto com banheiro"><figcaption>Quarto com banheiro</figcaption></figure>
   <figure><img loading="lazy" src="img/cozinha.jpg" alt="Cozinha e área de serviço"><figcaption>Cozinha e área de serviço</figcaption></figure>
   <figure><img loading="lazy" src="img/banheiro-1.jpg" alt="Banheiro com pia de granito e janela"><figcaption>Banheiro</figcaption></figure>
- </div>
 </div></section>
 
 <section class="sand"><div class="w two">
@@ -99,7 +109,7 @@ footer{padding:28px 0 40px;font-size:14px;color:var(--mut);text-align:center}
   <h2>Feito para o seu dia a dia</h2>
   <ul class="chk">
    <li>2 quartos bem distribuídos</li>
-   <li>2 banheiros, sendo um reversível para suíte</li>
+   <li>1 banheiro reversível para suíte</li>
    <li>Sala aconchegante com acesso à sacada</li>
    <li>Cozinha funcional com bancada em granito</li>
    <li>1 vaga de garagem coberta</li>
@@ -159,8 +169,11 @@ footer{padding:28px 0 40px;font-size:14px;color:var(--mut);text-align:center}
 
 <footer><div class="w">Imagens ilustrativas do imóvel. Valores e condições sujeitos a confirmação.</div></footer>
 
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Galeria de fotos">
+ <button class="x" aria-label="Fechar">&times;</button><button class="p" aria-label="Foto anterior">&#8249;</button><img id="lbi" alt=""><button class="n" aria-label="Próxima foto">&#8250;</button><div class="c" id="lbc"></div>
+</div>
 <script>
-var PHONE="553491099276"; // TROQUE pelo número com DDI+DDD, só dígitos
+var PHONE="5534991099276"; // TROQUE pelo número com DDI+DDD, só dígitos
 var base="Olá! Vi o anúncio do apartamento no Gran Life (R$ 260.000) e quero agendar uma visita.";
 function wa(t){return "https://wa.me/"+PHONE+"?text="+encodeURIComponent(t)}
 var f=document.getElementById("f"),q2=document.getElementById("q2"),q3=document.getElementById("q3");
@@ -179,4 +192,16 @@ var m=base+"\n\n"+(n?"Nome: "+n+"\n":"")+"Telefone: "+tel+"\n"+"Forma de compra:
 if(fin){m+="Financiamento aprovado: "+val("aprov")+"\n";if(val("aprov")==="Sim"&&cr)m+="Crédito aprovado: "+cr+"\n"}
 if(d)m+="Dúvida: "+d;
 window.open(wa(m),"_blank","noopener")});
+
+(function(){var im=[].slice.call(document.querySelectorAll(".hero img,.gal img,.pool img")),lb=document.getElementById("lb"),li=document.getElementById("lbi"),lc=document.getElementById("lbc"),i=0,last=null,x0=null;
+function show(k){i=(k+im.length)%im.length;li.classList.add("sw");setTimeout(function(){li.src=im[i].src;li.alt=im[i].alt;lc.textContent=im[i].alt+" ("+(i+1)+" de "+im.length+")";li.classList.remove("sw")},120)}
+function open(k){last=document.activeElement;lb.classList.add("on");document.body.style.overflow="hidden";li.src=im[k].src;i=k;li.alt=im[k].alt;lc.textContent=im[k].alt+" ("+(k+1)+" de "+im.length+")";lb.querySelector(".x").focus()}
+function close(){lb.classList.remove("on");document.body.style.overflow="";if(last)last.focus()}
+im.forEach(function(e,k){e.classList.add("zm");e.tabIndex=0;e.setAttribute("role","button");e.addEventListener("click",function(){open(k)});e.addEventListener("keydown",function(v){if(v.key==="Enter"||v.key===" "){v.preventDefault();open(k)}})});
+lb.querySelector(".x").onclick=close;lb.querySelector(".p").onclick=function(){show(i-1)};lb.querySelector(".n").onclick=function(){show(i+1)};
+lb.addEventListener("click",function(e){if(e.target===lb)close()});
+document.addEventListener("keydown",function(e){if(!lb.classList.contains("on"))return;if(e.key==="Escape")close();if(e.key==="ArrowLeft")show(i-1);if(e.key==="ArrowRight")show(i+1)});
+lb.addEventListener("touchstart",function(e){x0=e.touches[0].clientX},{passive:true});
+lb.addEventListener("touchend",function(e){if(x0===null)return;var d=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(d)>45)show(d<0?i+1:i-1)});
+})();
 </script></body></html>
